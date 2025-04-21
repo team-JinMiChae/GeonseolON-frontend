@@ -6,16 +6,18 @@ import styles from './App.module.css';
 
 function App() {
   return (
-    <div className={styles.wrapper}>
-      <Header />
-      <div className={styles.content}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Main />}/>
-          </Routes>
-        </BrowserRouter>
+    <BrowserRouter>
+      <div className={styles.wrapper}>
+        <Header />
+        <div className={styles.content}>
+          
+            <Routes>
+              <Route path="/" element={<Main />}/>
+            </Routes>
+          
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 

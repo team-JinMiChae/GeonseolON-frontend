@@ -1,5 +1,139 @@
 .wrapper {
     width: 100%;
-    background-color: green;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.inner {
+    box-sizing: border-box;
+    width: 93%;
     height: 12vh;
+    border-bottom: 1px solid #056C00;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    width: 800px;
+    justify-content: end;
+    gap: 20px;
+    align-items: center;
+}
+
+.rankTitle {
+    color: #7F9658;
+    font-weight: bolder;
+    min-width: 60px;
+}
+
+.searchBar {
+    display: flex;
+    width: 50%;
+    align-items: center;
+    background-color: #EFEFEF;
+    color: #B1B1B1;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+.searchBar input {
+    background-color: transparent;
+    border: 0;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+button {
+    background-color: transparent;
+    border: 0;
+    display: inline-flex;           /* 내부 컨텐츠(아이콘) 중앙정렬을 위해 flex 사용 */
+    align-items: center;            /* 수직 중앙정렬 */
+    justify-content: center;
+    padding: 10px;
+}
+
+.menu {
+    box-sizing: border-box;
+    width: 93%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 5%;
+    box-shadow: 0px 3px 2px 2px #c9c9c9;
+    border-radius: 0 0 20px 20px;
+    overflow: auto;
+}
+
+.serviceLinks, .serviceTitle {
+    width: 200px;
+    min-width: 200px;
+}
+
+.externalLinks, .externalTitle {
+    width: 200px;
+    min-width: 200px;
+}
+
+.titleBox {
+    display: flex;
+    /* min-width: 800px; */
+    font-size: 1.2rem;
+    border-bottom: 1px solid #969696;
+    text-align: start;
+}
+
+.titleBox > h3 {
+    padding: 0 40px;
+}
+
+.linkBox {
+    display: flex;
+    padding: 20px 0;
+}
+
+.serviceLinks, .externalLinks {
+    display: flex;
+    flex-direction: column;
+    padding: 0 40px;
+}
+
+.link {
+    text-decoration: none;
+    color: #444444;
+    width: fit-content;
+    height: fit-content;
+    padding: 7px;
+    margin: 3px;
+    font-size: 1.2rem;
+    text-align: start;
+    display :inline-block;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.menuEnter {
+    transform: translateY(-10%);
+    opacity: 0;
+}
+  
+.menuEnterActive {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 300ms ease;
+}
+  
+.menuExit {
+    opacity: 1;
+    transform: translateY(0);
+}
+  
+.menuExitActive {
+    transform: translateY(-10%);
+    opacity: 0;
+    transition: all 300ms ease;
 }
