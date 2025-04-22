@@ -1,6 +1,6 @@
 import React from 'react';
 
-const rule = () => {
+const Rule = () => {
     return (
         <div>
             안전 수칙 페이지
@@ -8,4 +8,4 @@ const rule = () => {
     );
 };
 
-export default rule;
+export default Rule;

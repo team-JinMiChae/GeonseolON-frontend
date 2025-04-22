@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styles from './Header.module.css';
@@ -10,9 +10,18 @@ import Ranks from '../Header/Ranks'
 const Header = () => {
     const [opened, setOpened] = useState(false);
     const openRef = useRef(null);
+    const navigate = useNavigate();
 
     const toggle = () => {
         setOpened(!opened)
+    }
+
+    const movePage = (e, path) => {
+        e.stopPropagation();
+        toggle();
+        setTimeout(() => {
+            navigate(path);
+        }, 0)
     }
 
     return (
@@ -53,10 +62,10 @@ const Header = () => {
                         </div>
                         <div className={styles.linkBox}>
                             <div className={styles.serviceLinks}>
-                                <Link className={styles.link} to='/chatAi'>AI 상담</Link>
-                                <Link className={styles.link} to='/institution'>안전 기관</Link>
-                                <Link className={styles.link} to='/rule'>안전 수칙</Link>
-                                <Link className={styles.link} to='/accident'>사고 사례</Link>
+                                <button className={styles.link} onClick={e => movePage(e, "/chatAi")}>AI 상담</button>
+                                <button className={styles.link} onClick={e => movePage(e, "/institution")}>안전 기관</button>
+                                <button className={styles.link} onClick={e => movePage(e, "/rule")}>안전 수칙</button>
+                                <button className={styles.link} onClick={e => movePage(e, "/accident")}>사고 사례</button>
                             </div>
                             <div className={styles.externalLinks}>
                                 <button className={styles.link} onClick={()=>{window.open("https://www.moel.go.kr")}}>고용노동부</button>
