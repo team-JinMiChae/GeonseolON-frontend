@@ -53,10 +53,10 @@ const Header = () => {
                         </div>
                         <div className={styles.linkBox}>
                             <div className={styles.serviceLinks}>
-                                <Link className={styles.link} to='/'>AI 상담</Link>
-                                <Link className={styles.link} to='/'>안전 기관</Link>
-                                <Link className={styles.link} to='/'>안전 수칙</Link>
-                                <Link className={styles.link} to='/'>사고 사례</Link>
+                                <Link className={styles.link} to='/chatAi'>AI 상담</Link>
+                                <Link className={styles.link} to='/institution'>안전 기관</Link>
+                                <Link className={styles.link} to='/rule'>안전 수칙</Link>
+                                <Link className={styles.link} to='/accident'>사고 사례</Link>
                             </div>
                             <div className={styles.externalLinks}>
                                 <button className={styles.link} onClick={()=>{window.open("https://www.moel.go.kr")}}>고용노동부</button>
