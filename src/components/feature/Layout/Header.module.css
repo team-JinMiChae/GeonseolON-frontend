@@ -6,7 +6,7 @@
     align-items: center;
     margin-bottom: 30px;
     position: relative;
-    z-index: 10;
+    z-index: 100;
 }
 
 .inner {
