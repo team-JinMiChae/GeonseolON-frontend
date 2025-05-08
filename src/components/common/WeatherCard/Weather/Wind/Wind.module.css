@@ -1,0 +1,97 @@
+.wind-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.cloud1, .cloud2, .cloud3, .cloud4 {
+    position: absolute;
+    top: 10%;
+    animation: windMove 5s ease-in-out infinite;
+}
+.cloud1 { left: 10%; animation-delay: 0s; }
+.cloud2 { top: 20%; left: 8%; animation-delay: 1s; }
+.cloud3 { top: 14%; left: 15%; animation-delay: 2s; }
+.cloud4 { top: 81%; left: 16%; animation-delay: 3s; }
+
+@keyframes windMove {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-100px); }
+    100% { transform: translateX(0); }
+}
+
+.trees {
+    position: absolute;
+    bottom: 0;
+    left: 38%;
+    top: 41%;
+    height: auto;
+    animation: treeShake 2s ease-in-out infinite;
+}
+
+.leaf {
+    position: absolute;
+    top: 35%;
+    left: 53%;
+    animation: leafFly 2s ease-in-out infinite;
+}
+
+@keyframes leafFly {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-0.5deg); }
+    50% { transform: rotate(-2deg); }
+    75% { transform: rotate(-1.5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* 바람 선 애니메이션 - 대각선 이동 */
+.windLine1, .windLine2, .windLine3, .windLine4 {
+    position: absolute;
+    opacity: 0;
+    animation: windFlowDiagonal 4s ease-in-out infinite;
+}
+
+.windLine1 {
+    top: -52%;
+    left: -43%;
+    animation-delay: 0s;
+}
+.windLine2 {
+    top: 16%;
+    left: 10%;
+    animation-delay: 1.5s;
+}
+.windLine3 {
+    top: 21%;
+    left: 16%;
+    animation-delay: 3s;
+}
+.windLine4 {
+    top: 39%;
+    left: -24%;
+    animation-delay: 2s;
+}
+
+
+@keyframes windFlowDiagonal {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(120vw, 25vh);
+        opacity: 0;
+    }
+}

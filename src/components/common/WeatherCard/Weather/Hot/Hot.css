@@ -1,0 +1,136 @@
+.hot-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.fade-enter {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+}
+.fade-exit {
+    opacity: 1;
+    transform: scale(1);
+}
+.fade-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+}
+
+/* 태양 애니메이션 */
+.sun-image {
+    position: absolute;
+    top: 8px;
+    right: 11px;
+    width: 190px;
+    height: 190px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 태양 햇살 glow 효과 */
+.glow {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0% {
+        filter: drop-shadow(0 0 30px rgb(255, 100, 0));
+        transform: scale(1.05);
+    }
+    50% {
+        filter: drop-shadow(0 0 60px rgb(255, 69, 0));
+        transform: scale(1.1);
+    }
+    100% {
+        filter: drop-shadow(0 0 30px rgb(255, 100, 0));
+        transform: scale(1.05);
+    }
+}
+
+/* 햇살 빛줄기 */
+.sun-rays1, .sun-rays2, .sun-rays3 {
+    position: absolute;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: rayShake 6s linear infinite;
+}
+
+/* 각 빛줄기 위치 설정 */
+.sun-rays1 {
+    top: 161px;
+    right: 124px;
+    animation: rayPulse1 3s ease-in-out infinite, rayShake 4s linear infinite;
+}
+
+.sun-rays2 {
+    top: 0;
+    right: 9px;
+    animation: rayPulse2 3s ease-in-out infinite, rayShake 4s linear infinite;
+    animation-delay: 1s;
+}
+
+.sun-rays3 {
+    top: 2px;
+    right: 156px;
+    animation: rayPulse3 3s ease-in-out infinite, rayShake 4s linear infinite;
+    animation-delay: 3s;
+}
+
+@keyframes rayPulse1 {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes rayPulse2 {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes rayPulse3 {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* 햇살 빛줄기 애니메이션 */
+@keyframes rayShake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

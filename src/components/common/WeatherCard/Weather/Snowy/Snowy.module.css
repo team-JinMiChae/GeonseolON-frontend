@@ -1,0 +1,69 @@
+.snowy-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* 눈송이  */
+.snowflake {
+    position: absolute;
+    width: 100%;
+    animation: snowFall linear infinite;
+    opacity: 0.8;
+    left: 0;
+}
+
+.snowflake0 {
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.snowflake1 {
+    animation-duration: 10s;
+    animation-delay: 1.5s;
+}
+
+.snowflake2 {
+    animation-duration: 14s;
+    animation-delay: 3s;
+}
+
+.snowflake3 {
+    animation-duration: 11s;
+    animation-delay: 0s;
+}
+
+.snowflake4 {
+    animation-duration: 13s;
+    animation-delay: 1.5s;
+}
+
+.snowflake5 {
+    animation-duration: 15s;
+    animation-delay: 3s;
+}
+/*설산*/
+.snowyMountain {
+    position: absolute;
+    top: 61.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+@keyframes snowFall {
+    0% {
+        top: -100%;
+        transform: translateX(0);
+    }
+    100% {
+        top: 100%;
+        transform: translateX(0);
+    }
+}
