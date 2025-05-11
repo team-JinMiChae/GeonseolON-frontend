@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Institution.module.css';
 
+const { kakao } = window;
+
 const Institution = () => {
+    const [map, setMap] = useState(null);
+
+    // 초기 중심 좌표
+    const initCoord = new kakao.maps.LatLng(37.551399, 126.988259);
+    const options = { //지도를 생성할 때 필요한 기본 옵션
+        center: initCoord, //지도의 중심좌표.
+        level: 4 //지도의 레벨(확대, 축소 정도)
+    };
+
+    // 지도 보이기
+    useEffect(() => {
+      const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+      setMap(new kakao.maps.Map(container, options)); // 지도 생성 및 객체 리턴
+    }, []);
+
     return (
         <div className={styles.container}>
       <header className={styles.header}>
@@ -42,7 +59,7 @@ const Institution = () => {
       </div>
 
       {/* Simple map placeholder as requested */}
-      <div className={styles.mapPlaceholder}>{/* This is just a placeholder div for the map */}</div>
+      <div id="map" className={styles.mapPlaceholder}></div>
 
       {[
         { num: 1, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
