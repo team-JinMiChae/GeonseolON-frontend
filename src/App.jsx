@@ -7,7 +7,7 @@ import ChatAi from './pages/ChatAi';
 import Institution from './pages/Institution';
 import Accident from './pages/Accident';
 import Rule from './pages/Rule';
-
+import { useEffect } from 'react';
 function App() {
   return (
     <BrowserRouter>
