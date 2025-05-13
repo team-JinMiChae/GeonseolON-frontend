@@ -1,0 +1,156 @@
+.weatherCard {
+    position: relative;
+    width: 100%;
+    max-width: 868px;
+    height: 380px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #b4b6bc;
+    color: white;
+    font-family: sans-serif;
+    border: 1px solid #242424;
+}
+
+.weatherBackground {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+.weather_location{
+    display: flex;
+    align-items: center;
+}
+.pinIcon{
+    width: 28px;
+}
+.weather_location_detail{
+    color:black;
+    margin-left: 5px;
+}
+
+
+.temperature{
+    font-size: 35px;
+    font-weight: bold;
+    color: black;
+}
+.temperature_Detail{
+    font-size: 18px;
+    color: white;
+}
+.dateInfo{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    color: black;
+    font-size: 18px;
+    margin: 18px 13px;
+}
+.rainLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.6);
+    animation: rain-fall 1s linear infinite;
+}
+
+.raindrop:nth-child(even) {
+    animation-duration: 0.8s;
+}
+.raindrop:nth-child(odd) {
+    animation-delay: 0.3s;
+}
+
+@keyframes rain-fall {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.raindrop {
+    top: -20px;
+    left: calc(100% * var(--i));
+}
+.raindrop:nth-child(n) {
+    left: calc(100% * var(--i) / 30);
+}
+
+.weatherContent {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin:5px;
+    justify-content: space-between;
+}
+
+.noticeBox {
+    background: rgba(255, 255, 255, 0.5);
+    color: #222;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 5px;
+    min-height: 112px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.noticeBox strong {
+    color: #1e3a8a;
+}
+
+.warn {
+    color: #e11d48;
+    font-weight: bold;
+}
+
+.moreBtn {
+    margin-top: 12px;
+    background: #333;
+    color: white;
+    padding: 6px 17px;
+    border-radius: 9999px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.moreBtn_detail{
+    display: flex;
+    justify-content: flex-end;
+}
+.weather_text{
+    font-size: 20px;
+    margin: 5px 9px;
+}
+.tempWithIcon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 13px;
+}
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ffffff;
+    margin: 8px 0;
+}
+
