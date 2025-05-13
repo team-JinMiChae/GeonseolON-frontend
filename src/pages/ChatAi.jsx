@@ -52,7 +52,6 @@ export default function ChatBot() {
           canAsk={canAsk}
           isLimited={isLimited}
           />
-        <img className={styles.background} src={"src/assets/chat_background.png"} alt="background" />
     </div>
   )
 }

@@ -13,7 +13,8 @@ const ChatAiInfo = () => {
             <div className={styles.innerHeader}>
 
                 <div className={styles.titleBox}>
-                    <img src={chatIcon}/>
+                    {/* <img src={chatIcon}/> */}
+                    <img width={120} src={'src/assets/chatbots/chatbot2_up.png'}/> 
                     <div className={styles.textBox}>
                         <h2 className={styles.serviceTitle}>AI 채팅 상담 서비스</h2>
                         <p className={styles.serviceDesc}>궁금한 내용을 <strong>건설이</strong>에게 물어보세요! <strong>건설이</strong>가
@@ -44,7 +45,7 @@ const ChatAiInfo = () => {
                             로그인 / 회원 가입 없이<br/>편리하게 이용 가능해요
                         </p>
                     </div>
-                    <img className={styles.character} src={'src/assets/chatbots/chatbot2_up.png'}/>
+                    {/* <img className={styles.character} src={'src/assets/chatbots/chatbot2_up.png'}/> */}
                 </div>
 
             </div>
