@@ -1,7 +1,5 @@
 {
-  "build": {
-    "env": {
-      "YARN_VERSION": "4.9.1"
-    }
-  }
+  "rewrites":  [
+    {"source": "/(.*)", "destination": "/"}
+  ]
 }
