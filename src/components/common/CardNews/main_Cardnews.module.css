@@ -1,0 +1,33 @@
+
+.card_News {
+    margin: 0 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.image {
+    background-color: #ccc;
+    height: 204px;
+    width: 186px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.noImageIcon {
+    font-size: 90px;
+    color: #999;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.description {
+    font-size: 14px;
+    color: #006D7E;
+}

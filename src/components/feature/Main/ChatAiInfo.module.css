@@ -1,12 +1,18 @@
 .wrapper {
     box-sizing: border-box;
     width: 100%;
+    display: flex;
     height: fit-content;
     background-color: rgba(216, 234, 185, 0.4);
     position: relative;
-    padding: 10px 100px;
+    padding: 10px 100px 20px;
+    justify-content: center;
+    align-items: stretch;
 }
-
+.wrapperDetail{
+    width: 100%;
+    max-width: 1280px;
+}
 .innerHeader {
     display: flex;
     justify-content: space-between;
@@ -60,6 +66,7 @@
     border-radius: 10px;
     padding: 10px;
     box-sizing: border-box;
+    justify-content: space-between
 }
 
 .featureItem h3 {
@@ -79,7 +86,7 @@
 
 .character {
     position: absolute;
-    right: 100px;
+    right: 8%;
     bottom: 0;
     width: 300px;
 }
