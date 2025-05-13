@@ -1,0 +1,20 @@
+/* WeatherDetailLayout.module.css */
+.weatherDetailLayout {
+    display: flex;
+    justify-content: space-between;
+    /*padding: 20px;*/
+    gap: 20px;
+}
+
+.weatherSidebar {
+    flex: 1;
+    max-width: 300px;
+}
+
+.weatherInfo {
+    flex: 2;
+    background-color: #fff;
+    /*padding: 15px;*/
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
