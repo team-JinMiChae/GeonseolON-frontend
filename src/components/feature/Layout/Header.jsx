@@ -7,6 +7,7 @@ import searchIcon from '../../../assets/icons/common/search.svg';
 import menuIcon from '../../../assets/icons/common/menu.svg';
 import Ranks from '../Header/Ranks'
 import logo from '../../../assets/logo.svg';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     const [opened, setOpened] = useState(false);
@@ -28,7 +29,7 @@ const Header = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.inner}>
-                <img src={logo}></img>
+                <Link to="/" className={styles.logo}><img src={logo}></img></Link>
                 <div className={styles.content}>
                     <p className={styles.rankTitle}>인기 검색</p>
                     <Ranks />
