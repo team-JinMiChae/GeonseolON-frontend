@@ -10,7 +10,6 @@ const Main = () => {
             <WeatherCardCategory />
             <ChatAiInfo />
             <MainCardNews />
-            main page Cade News
         </div>
     );
 };
