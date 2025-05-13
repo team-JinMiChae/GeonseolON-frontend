@@ -20,13 +20,13 @@ const Institution = () => {
     }, []);
 
     return (
-        <div className={styles.container}>
+      <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>안전보건 교육기관 찾기</h1>
       </header>
 
       <div className={styles.searchSection}>
-        <div className={styles.selectGroup}>
+        {/* <div className={styles.selectGroup}>
           <select className={styles.select}>
             <option value="">선택</option>
           </select>
@@ -34,7 +34,7 @@ const Institution = () => {
           <select className={styles.select}>
             <option value="">선택</option>
           </select>
-        </div>
+        </div> */}
 
         <div className={styles.searchContainer}>
           <input type="text" placeholder="검색어를 입력하세요" className={styles.searchInput} />
