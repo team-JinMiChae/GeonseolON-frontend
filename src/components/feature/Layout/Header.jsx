@@ -6,6 +6,7 @@ import styles from './Header.module.css';
 import searchIcon from '../../../assets/icons/common/search.svg';
 import menuIcon from '../../../assets/icons/common/menu.svg';
 import Ranks from '../Header/Ranks'
+import logo from '../../../assets/logo.svg';
 
 const Header = () => {
     const [opened, setOpened] = useState(false);
@@ -27,9 +28,7 @@ const Header = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.inner}>
-                <div>
-                    Logo
-                </div>
+                <img src={logo}></img>
                 <div className={styles.content}>
                     <p className={styles.rankTitle}>인기 검색</p>
                     <Ranks />
