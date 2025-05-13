@@ -3,7 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import styles from "./Cloudy.module.css";
 
 import cloudyBackImg from "../../../../../assets/WeatherImg/Cloudy/cloudyBackImg.png";
-import sunImg from "../../../../../assets/WeatherImg/Cloudy/Cloudy_SunImg.png";
+import sunImg from "../../../../../assets/WeatherImg/Cloudy/cloudy_SunImg.png";
 import cloud1 from "../../../../../assets/WeatherImg/ClearDay/clearDay_Cloud1.png";
 import cloud2 from "../../../../../assets/WeatherImg/ClearDay/clearDay_Cloud2.png";
 
