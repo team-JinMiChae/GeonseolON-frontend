@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
     TiWeatherPartlySunny,
     TiWeatherCloudy,
@@ -59,6 +60,7 @@ const getFormattedDateTime = () => {
 // 위도, 경도 -> 주소 변환 (카카오API)
 const getAddressFromCoords = async (longitude, latitude) => {
     const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`;
+   
 
     try {
         const response = await fetch(url, {
@@ -89,6 +91,7 @@ const getAddressFromCoords = async (longitude, latitude) => {
 const WeatherCard = ({ temperature = 13, type = "wind" }) => {
     const [location, setLocation] = useState("위치 불러오는 중...");
     const [dateTime, setDateTime] = useState(getFormattedDateTime());
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 위치 가져오기
@@ -129,7 +132,7 @@ const WeatherCard = ({ temperature = 13, type = "wind" }) => {
 
             <div className={styles.weatherContent}>
                 <div className={styles.weather_location}>
-                    <img src={pinIcon} alt="location pin" className={styles.pinIcon} />
+                    <img src={pinIcon} alt="location pin" className={styles.pinIcon}/>
                     <span className={styles.weather_location_detail}>{location}</span>
                 </div>
 
@@ -154,7 +157,7 @@ const WeatherCard = ({ temperature = 13, type = "wind" }) => {
                 <div className={styles.noticeBox}>
                     <div className={styles.weather_text}>
                         오늘은 강수량 OOmm로 <strong>강한 비와 천둥번개</strong>가 예보되어있어요.
-                        <br />
+                        <br/>
                         <span className={styles.warn}>
                             전기 설비 근처 접근을 삼가고, 감전사고에 유의하세요!
                         </span>{" "}
@@ -163,8 +166,14 @@ const WeatherCard = ({ temperature = 13, type = "wind" }) => {
                 </div>
 
                 <div className={styles.moreBtn_detail}>
-                    <button className={styles.moreBtn}>더 많은 정보 보기 &gt;</button>
+                    <button
+                        className={styles.moreBtn}
+                        onClick={() => navigate("/weatherDetail")}
+                    >
+                        더 많은 정보 보기 &gt;
+                    </button>
                 </div>
+
             </div>
         </div>
     );
