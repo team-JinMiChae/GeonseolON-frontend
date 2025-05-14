@@ -62,12 +62,12 @@ const Institution = () => {
       <div id="map" className={styles.mapPlaceholder}></div>
 
       {[
-        { num: 1, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
-        { num: 2, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
-        { num: 3, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
-        { num: 2, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
-        { num: 3, name: "기관명", address: "주소:", postal: "우편번호", phone: "전화번호", fax: "팩스번호" },
-      ].map((item, index) => (
+        { num: 1, name: "(주)한국안전보건기술원", address: "강원도 원주시 태장공단길 46", postal: "26311", phone: "033-734-3902", fax: "033-735-3903" },
+        { num: 2, name: "주식회사 우리안전기술원", address: "전라남도 순천시 고지5길 3", postal: "57924", phone: "061-727-1135", fax: "061-742-9926" },
+        { num: 3, name: "한국건설안전연구원(주)", address: "인천광역시 부평구 부평대로 138", postal: "21358", phone: "032-515-8082", fax: "032-517-8082" },
+        { num: 4, name: "대신산업안전보건원", address: "서울특별시 강동구 천호대로151길 36 , 9층", postal: "5248", phone: "02-471-5555", fax: "02-476-3246" },
+        { num: 5, name: "한국건설안전교육원(주)", address: "부산광역시 사상구 사상로 336 , 3층", postal: "46945", phone: "051-583-2601", fax: "051-583-2603" }
+        ].map((item, index) => (
         <div key={index} className={styles.facilityItem}>
           <div className={styles.facilityHeader}>
             <span className={styles.facilityNumber}>{item.num}</span>

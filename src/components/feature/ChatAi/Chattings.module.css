@@ -15,11 +15,12 @@
     height: 100%;
     display: flex;
     flex-direction: column-reverse;
+    overflow-y: auto;
   }
   
   .messagesContainer {
     flex: 1;
-    overflow-y: auto;
+    height: fit-content;
     padding: 1rem;
     display: flex;
     flex-direction: column;
