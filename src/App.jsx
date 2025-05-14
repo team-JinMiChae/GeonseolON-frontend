@@ -7,6 +7,7 @@ import ChatAi from './pages/ChatAi';
 import Institution from './pages/Institution';
 import Accident from './pages/Accident';
 import Rule from './pages/Rule';
+import WeatherDetail from './pages/WeatherDetail';
 import { useEffect } from 'react';
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/institution" element={<Institution />}/>
               <Route path="/rule" element={<Rule />}/>
               <Route path="/accident" element={<Accident />}/>
+              <Route path="/weatherDetail" element={<WeatherDetail />} />
             </Routes>
         </div>
       </div>
