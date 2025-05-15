@@ -8,6 +8,7 @@ import Institution from './pages/Institution';
 import Accident from './pages/Accident';
 import Rule from './pages/Rule';
 import WeatherDetail from './pages/WeatherDetail';
+
 import { useEffect } from 'react';
 function App() {
   return (
