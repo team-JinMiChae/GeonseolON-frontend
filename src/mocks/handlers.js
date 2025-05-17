@@ -41,8 +41,8 @@ export const handlers = [
     }),
 
     // 채팅 AI 조회
-    http.get(`${baseUrl}/chat_ai`, ({ request }) => {
-        const requestBody = request.json();
+    http.post(`${baseUrl}/chat_ai`, ({ request }) => {
+        const requestBody = request.body;
         console.log(requestBody);
 
         const body = JSON.stringify({
