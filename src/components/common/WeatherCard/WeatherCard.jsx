@@ -21,6 +21,8 @@ import Wind from "./Weather/Wind/Wind.jsx";
 import pinIcon from "../../../assets/icons/common/pin_Icon.png";
 import styles from "./WeatherCard.module.css";
 
+import axios from "../../../utils/customAxios";
+
 // 날씨별 컴포넌트 매핑
 const weatherComponents = {
     hot: <Hot />,
@@ -34,13 +36,13 @@ const weatherComponents = {
 
 // 날씨별 아이콘 매핑
 const weatherIcons = {
-    hot: <LuSun size={82} color="#2E2E2E" />,
-    clearDay: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
-    cloudy: <TiWeatherCloudy size={82} color="#2E2E2E" />,
-    rain: <TiWeatherDownpour size={82} color="#2E2E2E" />,
-    lightning: <TiWeatherStormy size={82} color="#2E2E2E" />,
-    snowy: <TiWeatherSnow size={82} color="#2E2E2E" />,
-    wind: <TiWeatherWindy size={82} color="#2E2E2E" />,
+    HOT: <LuSun size={82} color="#2E2E2E" />,
+    CLEARDAY: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
+    CLOUDY: <TiWeatherCloudy size={82} color="#2E2E2E" />,
+    RAIN: <TiWeatherDownpour size={82} color="#2E2E2E" />,
+    LIGHTNING: <TiWeatherStormy size={82} color="#2E2E2E" />,
+    SNOWY: <TiWeatherSnow size={82} color="#2E2E2E" />,
+    WIND: <TiWeatherWindy size={82} color="#2E2E2E" />,
 };
 
 // 현재 날짜와 시간을 포맷팅해서 반환하는 함수
@@ -92,34 +94,36 @@ const getAddressFromCoords = async (longitude, latitude) => {
 };
 
 const WeatherCard = () => {
-    const [temperature, setTemperature] = useState(null);
-    const [type, setType] = useState(null);
+    const [latLong, setLatLong] = useState([null, null]);
     const [location, setLocation] = useState("위치 불러오는 중...");
     const [dateTime, setDateTime] = useState(getFormattedDateTime());
     const navigate = useNavigate();
+    const [weatherGuide, setWeatherGuide] = useState(null);
+    const weatherTypeMent = {
+        HOT: "매우 뜨거워요.",
+        CLEARDAY: "맑은 날씨에요.",
+        CLOUDY: "구름이 많아요.",
+        RAIN: "비가 오고 있어요.",
+        LIGHTNING: "천둥번개가 있어요.",
+        SNOWY: "눈이 오고 있어요.",
+        WIND: "바람이 많아요.",
+    }
 
-    // 서버에서 날씨 데이터 받아오기
-    const fetchWeatherData = async () => {
+    const loadWeatherGuide = async () => {
         try {
-            const res = await fetch("/weather");
-            if (!res.ok) throw new Error("서버 응답 에러");
-            const data = await res.json();
-            setTemperature(data.temperature);
-            setType(data.type);
+            const res = await axios.get(`/weather_guide?latitude=${latLong[0]}&longitude=${latLong[1]}&regionName=${location}`);
+            setWeatherGuide(res.data)
         } catch (error) {
-            console.error("날씨 데이터 로드 실패:", error);
-            setTemperature("정보 없음");
-            setType(null);
+            console.error("날씨 가이드 로드 실패:", error);
         }
-    };
+    }
 
     useEffect(() => {
-        fetchWeatherData();
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
                     const { latitude, longitude } = position.coords;
+                    setLatLong([latitude, longitude])
                     const address = await getAddressFromCoords(longitude, latitude);
                     setLocation(address);
                 },
@@ -139,11 +143,15 @@ const WeatherCard = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        loadWeatherGuide();
+    }, [location]);
+
     const { date, time } = dateTime;
 
     return (
         <div className={styles.weatherCard}>
-            {type && weatherComponents[type]}
+            {weatherGuide?.type && weatherComponents[weatherGuide.type]}
 
             <div className={styles.weatherContent}>
                 <div className={styles.weather_location}>
@@ -154,12 +162,14 @@ const WeatherCard = () => {
                 <div className={styles.top}>
                     <div className={styles.locationInfo}>
                         <div className={styles.tempWithIcon}>
-                            {type && weatherIcons[type]}
+                            {weatherGuide?.type && weatherIcons[weatherGuide.type]}
                             <div>
                                 <div className={styles.temperature}>
-                                    {temperature !== null ? `${temperature}°C` : "로딩 중..."}
+                                    {weatherGuide !== null && weatherGuide.tmp !== null ? `${weatherGuide.tmp}°C` : "로딩 중..."}
                                 </div>
-                                <div className={styles.temperature_Detail}>4°C / 15°C</div>
+                                <div className={styles.temperature_Detail}>
+                                    {weatherGuide !== null && weatherGuide.tmn !== null && weatherGuide?.tmx !== null ? `${weatherGuide.tmn}°C / ${weatherGuide.tmx}°C` : "로딩 중..."}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -174,11 +184,12 @@ const WeatherCard = () => {
 
                 <div className={styles.noticeBox}>
                     <div className={styles.weather_text}>
-                        오늘은 강수량 OOmm로 <strong>강한 비와 천둥번개</strong>가 예보되어있어요.
+                        {/* 오늘은 강수량 {weatherGuide.pop}%로 <strong>강한 비와 천둥번개</strong>가 예보되어있어요. */}
+                        {weatherGuide !== null && weatherGuide.pop !== null && weatherGuide?.type !== null && `오늘은 강수량 ${weatherGuide.pop}%로 ${weatherTypeMent[weatherGuide.type]}`}
                         <br />
                         <span className={styles.warn}>
-              전기 설비 근처 접근을 삼가고, 감전사고에 유의하세요!
-            </span>{" "}
+                            {weatherGuide !== null && weatherGuide.weatherMent !== null && weatherGuide.weatherMent}
+                        </span>{" "}
                         안전제일 :)
                     </div>
                 </div>
