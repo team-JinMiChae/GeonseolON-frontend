@@ -1,6 +1,6 @@
 import { http } from 'msw';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
+const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/v1`;
 
 export const handlers = [
     //날씨 컴포넌트 날씨 상태, 온도 전달
