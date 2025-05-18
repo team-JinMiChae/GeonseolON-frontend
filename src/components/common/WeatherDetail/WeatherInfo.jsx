@@ -1,19 +1,27 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './WeatherInfo.module.css';
 import CardNews from '../CardNews/main_Cardnews.jsx';
 import WeatherSidebar from './WeatherSidebar.jsx';
+import AccidentTab from './AccidentTab.jsx';
 
 
 const WeatherInfo = () => {
     const preventRef = useRef(null);
     const caseRef = useRef(null);
     const [currentSection, setCurrentSection] = useState("prevent");
+    const [tabs, setTabs] = useState(["공통"]);
+    const [currentTab, setCurrentTab] = useState("공통");
 
     const scrollToSection = (section) => {
         setCurrentSection(section);
         const ref = section === "prevent" ? preventRef : caseRef;
         ref.current?.scrollIntoView({ behavior: 'smooth' });
     };
+
+    const moveTab = (e) => {
+        if (e.target.value === currentTab) return;
+        setCurrentTab(e.target.value);
+    }
 
     const preventContent = {
         title: "낙상사고 대처 및 예방책",
@@ -36,6 +44,10 @@ const WeatherInfo = () => {
         ],
     };
 
+    useEffect(() => {
+        setTabs([...tabs, "무너짐", "넘어짐", "낙하물"])
+    }, [])
+
     return (
         <div className={styles.container}>
             <WeatherSidebar
@@ -46,13 +58,15 @@ const WeatherInfo = () => {
 
             {/* 오른쪽: 내용 */}
             <div className={styles.content}>
+                <AccidentTab onMoveTab={moveTab} currentTab={currentTab} tabs={tabs}/>
+
                 <section ref={preventRef} className={styles.section}>
-                    <h2 className={styles.weatherInfo_Title}>{preventContent.title}</h2>
+                    <h2 className={styles.weatherInfo_Title}>{currentTab} 대처 및 예방책</h2>
                     <p className={styles.weatherInfo_description}>{preventContent.description}</p>
                 </section>
 
                 <section ref={caseRef} className={styles.section}>
-                    <h2 className={styles.weatherInfo_Title}>낙상 사고 사례</h2>
+                    <h2 className={styles.weatherInfo_Title}>{currentTab} 사례</h2>
                     <div className={styles.weatherInfo_cardNews}>
                         {preventContent.items.map((item, idx) => (
                             <div className={styles.weatherCards}>
