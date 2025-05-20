@@ -25,7 +25,7 @@
 
 .section {
     display: flex;
-    padding: 60px 70px 40px 70px;
+    padding: 20px 70px 40px 70px;
     flex-direction: column;
 }
 .content{
