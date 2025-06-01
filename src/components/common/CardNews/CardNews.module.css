@@ -1,0 +1,85 @@
+
+.card_News {
+    margin: 0 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.image {
+    background-color: #ccc;
+    height: 204px;
+    width: 186px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+.noImageIcon {
+    font-size: 90px;
+    color: #999;
+}
+
+.modalContent {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    color: #3A781B;
+    background-color: rgba(216, 234, 185, 0.4);
+    padding: 10px 20px;
+    margin: 0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.content {
+    font-size: 16px;
+    color: #444444;
+    text-align: justify;
+    padding: 10px 20px;
+    margin: 0;
+}
+
+.attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+}
+
+.attachment {
+    display: flex;
+    width: 70%;
+    border: 1px solid #3A781B;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #3A781B;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.downloadIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.attachment:hover {
+    background-color: #3A781B;
+    color: white;
+}
