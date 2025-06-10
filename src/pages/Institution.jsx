@@ -7,39 +7,43 @@ const Institution = () => {
     const [map, setMap] = useState(null);
     const [institutions, setInstitutions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const markersRef = useRef([]); // 마커 관리용 ref
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const markersRef = useRef([]);
+    const infowindowRef = useRef(null);
 
-    // 초기 지도 중심 좌표 (서울 시청 근처)
     const initCoord = new kakao.maps.LatLng(37.5665, 126.9780);
     const options = {
         center: initCoord,
         level: 4,
     };
 
-    // 지도 생성 (한번만)
     useEffect(() => {
         const container = document.getElementById('map');
         const mapInstance = new kakao.maps.Map(container, options);
         setMap(mapInstance);
+
+        infowindowRef.current = new kakao.maps.InfoWindow({ removable: true });
+
+        kakao.maps.event.addListener(mapInstance, 'click', () => {
+            if (infowindowRef.current) {
+                infowindowRef.current.close();
+            }
+        });
     }, []);
 
-    // 위치 받아서 백엔드 호출 및 마커 표시
     useEffect(() => {
         if (!map) return;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    // 지도 중심 이동
+                ({ coords }) => {
+                    const { latitude, longitude } = coords;
                     const center = new kakao.maps.LatLng(latitude, longitude);
                     map.setCenter(center);
-
                     fetchInstitutions(latitude, longitude);
                 },
                 (error) => {
-                    console.error('위치 정보를 가져올 수 없습니다:', error);
-                    // 위치 권한 거부 시 기본 위치에서 기관 리스트 호출
+                    console.warn('위치 정보 실패:', error);
                     fetchInstitutions(initCoord.getLat(), initCoord.getLng());
                 }
             );
@@ -49,71 +53,91 @@ const Institution = () => {
         }
     }, [map]);
 
-    // 백엔드 API 호출
-    const fetchInstitutions = async (latitude, longitude, lastId = null) => {
+    const fetchInstitutions = async (latitude, longitude) => {
         setLoading(true);
         try {
-            let url = `${import.meta.env.VITE_BASE_URL}/api/v1/institution?latitude=${latitude}&longitude=${longitude}`;
-            if (lastId) url += `&lastId=${lastId}`;
+            const url = `${import.meta.env.VITE_BASE_URL}/api/v1/institution?latitude=${latitude}&longitude=${longitude}`;
+            const res = await fetch(url);
 
-            const res = await fetch(url, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!res.ok) {
-                throw new Error(`API 요청 실패: ${res.status} ${res.statusText}`);
-            }
-
-            const contentType = res.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                throw new Error('응답이 JSON 형식이 아닙니다.');
-            }
+            if (!res.ok) throw new Error(`기관 정보 요청 실패: ${res.status}`);
 
             const data = await res.json();
-            console.log('응답 데이터:', data);
-
             setInstitutions(data.content || []);
             displayMarkersOnMap(data.content || []);
         } catch (error) {
-            console.error('데이터 불러오기 오류:', error.message);
+            console.error('기관 정보 불러오기 오류:', error.message);
+            setInstitutions([]);
         } finally {
             setLoading(false);
         }
     };
 
-
-    // 마커 표시 및 관리
     const displayMarkersOnMap = (institutionList) => {
-        // 기존 마커 제거
         markersRef.current.forEach((marker) => marker.setMap(null));
         markersRef.current = [];
 
+        if (!institutionList.length) return;
+
         institutionList.forEach((inst) => {
             const position = new kakao.maps.LatLng(inst.latitude, inst.longitude);
-            const marker = new kakao.maps.Marker({
-                map: map,
-                position,
-                title: inst.name,
-            });
-
-            // 인포윈도우 생성
-            const infowindow = new kakao.maps.InfoWindow({
-                content: `
-          <div style="padding:5px; min-width:150px;">
-            <strong>${inst.name}</strong><br/>
-            ${inst.address}<br/>
-            전화: ${inst.phoneNumber}
-          </div>
-        `,
-            });
+            const marker = new kakao.maps.Marker({ map, position, title: inst.name });
 
             kakao.maps.event.addListener(marker, 'click', () => {
-                infowindow.open(map, marker);
+                const content = `
+                    <div style="padding:5px; min-width:150px;">
+                        <strong>${inst.name}</strong><br/>
+                        ${inst.address}<br/>
+                        전화: ${inst.phoneNumber}
+                    </div>`;
+                infowindowRef.current.setContent(content);
+                infowindowRef.current.open(map, marker);
             });
 
             markersRef.current.push(marker);
+        });
+
+        map.setCenter(new kakao.maps.LatLng(institutionList[0].latitude, institutionList[0].longitude));
+        map.setLevel(5);
+    };
+
+    const handleInstitutionClick = (index) => {
+        const marker = markersRef.current[index];
+        const inst = institutions[index];
+        if (!marker || !inst) return;
+
+        map.setCenter(marker.getPosition());
+        map.setLevel(5);
+
+        const content = `
+            <div style="padding:5px; min-width:150px;">
+                <strong>${inst.name}</strong><br/>
+                ${inst.address}<br/>
+                전화: ${inst.phoneNumber}
+            </div>`;
+        infowindowRef.current.setContent(content);
+        infowindowRef.current.open(map, marker);
+    };
+
+    const onChangeSearch = (e) => setSearchKeyword(e.target.value);
+
+    const onSearchPlace = () => {
+        if (!map || !searchKeyword.trim()) return;
+
+        const ps = new kakao.maps.services.Places();
+
+        ps.keywordSearch(searchKeyword, (data, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                const place = data[0];
+                const lat = parseFloat(place.y);
+                const lng = parseFloat(place.x);
+                const center = new kakao.maps.LatLng(lat, lng);
+                map.setCenter(center);
+
+                fetchInstitutions(lat, lng);
+                // sendCoordinatesToServer(lat, lng); // 필요 시 사용
+            } else {
+                alert('검색 결과가 없습니다.');
+            }
         });
     };
 
@@ -129,9 +153,11 @@ const Institution = () => {
                         type="text"
                         placeholder="검색어를 입력하세요"
                         className={styles.searchInput}
-                        // 검색 기능 추가 가능
+                        value={searchKeyword}
+                        onChange={onChangeSearch}
+                        onKeyDown={(e) => e.key === 'Enter' && onSearchPlace()}
                     />
-                    <button className={styles.searchButton}>
+                    <button className={styles.searchButton} onClick={onSearchPlace}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -151,26 +177,33 @@ const Institution = () => {
                 </div>
             </div>
 
-            <div id="map" className={styles.mapPlaceholder} style={{ width: '100%', height: '400px' }}></div>
+            <div className={styles.mapContainer}>
+                <div id="map" className={styles.mapPlaceholder}></div>
 
-            <section className={styles.listSection}>
-                {loading && <p>로딩 중...</p>}
-                {!loading && institutions.length === 0 && <p>기관 정보를 불러오지 못했습니다.</p>}
-                {!loading &&
-                    institutions.map((item) => (
-                        <div key={item.id} className={styles.facilityItem}>
-                            <div className={styles.facilityHeader}>
-                                <h3 className={styles.facilityName}>{item.name}</h3>
+                <section className={styles.listSection}>
+                    {loading && <p>로딩 중...</p>}
+                    {!loading && institutions.length === 0 && <p>기관 정보를 불러오지 못했습니다.</p>}
+                    {!loading &&
+                        institutions.map((item, index) => (
+                            <div
+                                key={item.id}
+                                className={styles.facilityItem}
+                                onClick={() => handleInstitutionClick(index)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <div className={styles.facilityHeader}>
+                                    <h3 className={styles.facilityName}>{item.name}</h3>
+                                </div>
+                                <div className={styles.facilityDetails}>
+                                    <div>{item.address}</div>
+                                    <div>우편번호: {item.postalCode}</div>
+                                    <div>전화: {item.phoneNumber}</div>
+                                    <div>팩스: {item.faxNumber}</div>
+                                </div>
                             </div>
-                            <div className={styles.facilityDetails}>
-                                <div>{item.address}</div>
-                                <div>우편번호: {item.postalCode}</div>
-                                <div>전화: {item.phoneNumber}</div>
-                                <div>팩스: {item.faxNumber}</div>
-                            </div>
-                        </div>
-                    ))}
-            </section>
+                        ))}
+                </section>
+            </div>
         </div>
     );
 };
