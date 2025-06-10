@@ -26,7 +26,7 @@ import axios from "../../../utils/customAxios";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const weatherComponents = {
     hot: <Hot />,
-    clearDay: <ClearDay />,
+    CLEAR_DAY: <ClearDay />,
     cloudy: <Cloudy />,
     snowy: <Snowy />,
     rain: <Rain />,
@@ -36,7 +36,7 @@ const weatherComponents = {
 
 const weatherIcons = {
     HOT: <LuSun size={82} color="#2E2E2E" />,
-    CLEARDAY: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
+    CLEAR_DAY: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
     CLOUDY: <TiWeatherCloudy size={82} color="#2E2E2E" />,
     RAIN: <TiWeatherDownpour size={82} color="#2E2E2E" />,
     LIGHTNING: <TiWeatherStormy size={82} color="#2E2E2E" />,
@@ -89,7 +89,7 @@ const WeatherCard = () => {
 
     const weatherTypeMent = {
         HOT: "매우 뜨거워요.",
-        CLEARDAY: "맑은 날씨에요.",
+        CLEAR_DAY: "맑은 날씨에요.",
         CLOUDY: "구름이 많아요.",
         RAIN: "비가 오고 있어요.",
         LIGHTNING: "천둥번개가 있어요.",

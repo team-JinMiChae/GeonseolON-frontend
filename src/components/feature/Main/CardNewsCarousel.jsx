@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import MainCardNews from '../../common/CardNews/main_Cardnews.jsx'; // MainCardNews를 임포트
 import styles from './CardNewsCarousel.module.css';
+import axios from "axios";
 
 
 // CardNewsCarousel 컴포넌트 정의
 const CardNewsCarousel = () => {
+
+    useEffect(() => {
+        const fetchCardNews = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/card_news`, {
+                    params: {
+                        pageNo: 1
+                    },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log('최신 카드뉴스:', res.data);
+            } catch (error) {
+                console.error('카드 뉴스:', error);
+            }
+        };
+
+        fetchCardNews();
+    }, []);
     // 데이터 정의
     const data = [
         { title: "뉴스 1", description: "카드 뉴스 간략한 내용121212",  image: "" },
