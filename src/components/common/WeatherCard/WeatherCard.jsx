@@ -23,10 +23,10 @@ import styles from "./WeatherCard.module.css";
 
 import axios from "../../../utils/customAxios";
 
-// 날씨별 컴포넌트 매핑
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 const weatherComponents = {
     hot: <Hot />,
-    clearDay: <ClearDay />,
+    CLEAR_DAY: <ClearDay />,
     cloudy: <Cloudy />,
     snowy: <Snowy />,
     rain: <Rain />,
@@ -34,10 +34,9 @@ const weatherComponents = {
     wind: <Wind />,
 };
 
-// 날씨별 아이콘 매핑
 const weatherIcons = {
     HOT: <LuSun size={82} color="#2E2E2E" />,
-    CLEARDAY: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
+    CLEAR_DAY: <TiWeatherPartlySunny size={82} color="#2E2E2E" />,
     CLOUDY: <TiWeatherCloudy size={82} color="#2E2E2E" />,
     RAIN: <TiWeatherDownpour size={82} color="#2E2E2E" />,
     LIGHTNING: <TiWeatherStormy size={82} color="#2E2E2E" />,
@@ -45,7 +44,6 @@ const weatherIcons = {
     WIND: <TiWeatherWindy size={82} color="#2E2E2E" />,
 };
 
-// 현재 날짜와 시간을 포맷팅해서 반환하는 함수
 const getFormattedDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
@@ -62,27 +60,16 @@ const getFormattedDateTime = () => {
     };
 };
 
-// 위도, 경도 -> 주소 변환 (카카오 API 호출)
 const getAddressFromCoords = async (longitude, latitude) => {
     const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`;
-
     try {
         const response = await fetch(url, {
             headers: {
                 Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_REST_API_KEY}`,
             },
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
         const data = await response.json();
-
-        if (data.documents.length === 0) {
-            throw new Error("주소를 찾을 수 없습니다.");
-        }
-
         const fullAddress = data.documents[0]?.address?.address_name;
         if (!fullAddress) return "주소를 찾을 수 없습니다.";
         const [first, second] = fullAddress.split(" ");
@@ -97,33 +84,55 @@ const WeatherCard = () => {
     const [latLong, setLatLong] = useState([null, null]);
     const [location, setLocation] = useState("위치 불러오는 중...");
     const [dateTime, setDateTime] = useState(getFormattedDateTime());
-    const navigate = useNavigate();
     const [weatherGuide, setWeatherGuide] = useState(null);
+    const navigate = useNavigate();
+
     const weatherTypeMent = {
         HOT: "매우 뜨거워요.",
-        CLEARDAY: "맑은 날씨에요.",
+        CLEAR_DAY: "맑은 날씨에요.",
         CLOUDY: "구름이 많아요.",
         RAIN: "비가 오고 있어요.",
         LIGHTNING: "천둥번개가 있어요.",
         SNOWY: "눈이 오고 있어요.",
         WIND: "바람이 많아요.",
-    }
+    };
 
     const loadWeatherGuide = async () => {
+        if (!latLong[0] || !latLong[1]) return;
+
         try {
-            const res = await axios.get(`/weather_guide?latitude=${latLong[0]}&longitude=${latLong[1]}&regionName=${location}`);
-            setWeatherGuide(res.data)
-        } catch (error) {
-            console.error("날씨 가이드 로드 실패:", error);
+            const fullAddress = await getAddressFromCoords(latLong[1], latLong[0]);
+            const regionName = fullAddress || "경기도 성남시";
+
+            const res = await axios.get(`${BASE_URL}/api/v1/weather_guide`, {
+                params: {
+                    latitude: latLong[0],
+                    longitude: latLong[1],
+                    regionName,
+                },
+            });
+            console.log("백엔드 응답:", res.data);
+            setWeatherGuide(res.data);
         }
-    }
+        catch (error) {
+                console.error("날씨 가이드 로드 실패:", error);
+                if (error.response) {
+                    console.error("Response error data:", error.response.data);
+                    console.error("Response status:", error.response.status);
+                } else if (error.request) {
+                    console.error("No response received:", error.request);
+                } else {
+                    console.error("Error message:", error.message);
+                }
+            }
+    };
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
                     const { latitude, longitude } = position.coords;
-                    setLatLong([latitude, longitude])
+                    setLatLong([latitude, longitude]);
                     const address = await getAddressFromCoords(longitude, latitude);
                     setLocation(address);
                 },
@@ -145,13 +154,13 @@ const WeatherCard = () => {
 
     useEffect(() => {
         loadWeatherGuide();
-    }, [location]);
+    }, [latLong]); // location → latLong 으로 변경
 
     const { date, time } = dateTime;
 
     return (
         <div className={styles.weatherCard}>
-            {weatherGuide?.type && weatherComponents[weatherGuide.type]}
+            {weatherGuide?.type && weatherComponents[weatherGuide.type.toLowerCase()]}
 
             <div className={styles.weatherContent}>
                 <div className={styles.weather_location}>
@@ -165,10 +174,12 @@ const WeatherCard = () => {
                             {weatherGuide?.type && weatherIcons[weatherGuide.type]}
                             <div>
                                 <div className={styles.temperature}>
-                                    {weatherGuide !== null && weatherGuide.tmp !== null ? `${weatherGuide.tmp}°C` : "로딩 중..."}
+                                    {weatherGuide?.tmp != null ? `${weatherGuide.tmp}°C` : "로딩 중..."}
                                 </div>
                                 <div className={styles.temperature_Detail}>
-                                    {weatherGuide !== null && weatherGuide.tmn !== null && weatherGuide?.tmx !== null ? `${weatherGuide.tmn}°C / ${weatherGuide.tmx}°C` : "로딩 중..."}
+                                    {weatherGuide?.tmn != null && weatherGuide?.tmx != null
+                                        ? `${weatherGuide.tmn}°C / ${weatherGuide.tmx}°C`
+                                        : "로딩 중..."}
                                 </div>
                             </div>
                         </div>
@@ -184,13 +195,14 @@ const WeatherCard = () => {
 
                 <div className={styles.noticeBox}>
                     <div className={styles.weather_text}>
-                        {/* 오늘은 강수량 {weatherGuide.pop}%로 <strong>강한 비와 천둥번개</strong>가 예보되어있어요. */}
-                        {weatherGuide !== null && weatherGuide.pop !== null && weatherGuide?.type !== null && `오늘은 강수량 ${weatherGuide.pop}%로 ${weatherTypeMent[weatherGuide.type]}`}
-                        <br />
-                        <span className={styles.warn}>
-                            {weatherGuide !== null && weatherGuide.weatherMent !== null && weatherGuide.weatherMent}
-                        </span>{" "}
-                        안전제일 :)
+                        {weatherGuide?.pop != null && weatherGuide?.type != null && (
+                            <>
+                                오늘은 강수량 {weatherGuide.pop}%로 {weatherTypeMent[weatherGuide.type]}
+                                <br />
+                                <span className={styles.warn}>{weatherGuide.weatherMent}</span>{" "}
+                                안전제일 :)
+                            </>
+                        )}
                     </div>
                 </div>
 
