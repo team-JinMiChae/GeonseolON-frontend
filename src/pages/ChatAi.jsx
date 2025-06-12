@@ -12,20 +12,24 @@ export default function ChatBot() {
   const [log, setLog] = useState([]);
   const [canAsk, setCanAsk] = useState(true);
   const [isLimited, setIsLimited] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     // e.preventDefault()
     if (!inputValue.trim() || !canAsk) return;
 
     setCanAsk(false)
+    setIsLoading(true);
     try {
       const newLog = [...log, {sender: "USER", text: inputValue}]
-      axios.post("/chat_ai", newLog).then(res => {
+      axios.post("/chat", newLog).then(res => {
         setLog([...newLog, {"text": res.data.text, "sender": "BOT"}])
+        setIsLoading(false);
       })    
       setCanAsk(true);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
     
     setIsConversationStarted(true)
@@ -51,6 +55,7 @@ export default function ChatBot() {
           handleSubmit={handleSubmit}
           canAsk={canAsk}
           isLimited={isLimited}
+          isLoading={isLoading}
           />
     </div>
   )

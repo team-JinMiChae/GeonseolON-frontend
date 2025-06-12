@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react';
 import styles from "./Input.module.css"
 import SendIcon from "../../../assets/icons/common/send.svg"
+import LoadingSpinner from '../../common/LoadingSpinner';
 
-export default function Input({ inputValue, setInputValue, handleSubmit, canAsk, isLimited }) {
+export default function Input({ inputValue, setInputValue, handleSubmit, canAsk, isLimited, isLoading }) {
     const placeholder = isLimited ? "사용한도에 도달했습니다" : canAsk ? "궁금한 내용을 질문해보세요!" : "잠시만 기다려주세요..."
     const textareaRef = useRef(null);
     const maxLength = 1000;
@@ -41,10 +42,10 @@ export default function Input({ inputValue, setInputValue, handleSubmit, canAsk,
     <button
         type="button"
         className={styles.submitButton}
-        disabled={!canAsk}
+        disabled={!canAsk || isLoading}
         onClick={handleSubmit}
     >
-        <img src={SendIcon} />
+        {isLoading ? <LoadingSpinner /> : <img src={SendIcon} />}
     </button>
 </div>
 
