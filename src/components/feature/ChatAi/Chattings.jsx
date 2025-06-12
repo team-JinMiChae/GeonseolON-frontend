@@ -1,7 +1,8 @@
 import { useRef, useEffect } from "react"
 import styles from "./Chattings.module.css"
+import LoadingDots from "../../common/LoadingDots"
 
-export default function Chattings({ log }) {
+export default function Chattings({ log, isLoading }) {
   const messagesContainerRef = useRef(null)
 
   // 스크롤을 맨 아래로 이동시키는 함수
@@ -36,7 +37,7 @@ export default function Chattings({ log }) {
 
             <div
               className={`${styles.messageBubble} ${
-                message.sender === "BOT" ? styles.messageBubbleUser : styles.messageBubbleConstruction
+                message.sender === "USER" ? styles.messageBubbleUser : styles.messageBubbleConstruction
               }`}
             >
               {message.text}
@@ -49,6 +50,18 @@ export default function Chattings({ log }) {
             )}
           </div>
         ))}
+        {isLoading && (
+          <div className={`${styles.messageSpace} ${styles.messageSpaceConstruction}`}>
+            <div className={`${styles.avatarContainer} ${styles.avatarContainerLeft}`}>
+              <div className={styles.avatarWrapper}>
+                <img src="src/assets/chatbots/chatbot2_up.png" width="50px" alt="건설이" fill className="rounded-full" />
+              </div>
+            </div>
+            <div className={`${styles.messageBubble} ${styles.messageBubbleConstruction}`}>
+              <LoadingDots />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
