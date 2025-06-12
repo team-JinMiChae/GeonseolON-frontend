@@ -24,9 +24,9 @@ const CardNewsCarousel = () => {
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 600) setCardsPerPage(1);
-            else if (window.innerWidth < 900) setCardsPerPage(2); 
-            else if (window.innerWidth < 1200) setCardsPerPage(3);
-            else if (window.innerWidth < 1500) setCardsPerPage(4);
+            else if (window.innerWidth < 800) setCardsPerPage(2); 
+            else if (window.innerWidth < 1000) setCardsPerPage(3);
+            else if (window.innerWidth < 1200) setCardsPerPage(4);
             else setCardsPerPage(5);
         };
 
@@ -41,8 +41,6 @@ const CardNewsCarousel = () => {
     const handleNext = () => {
         setCurrentIndex(prevIndex => Math.min(prevIndex + 1, data.length - cardsPerPage)); // 마지막 페이지 넘어가지 않게
     };
-
-    
 
     useEffect(() => {
         const fetchCardNews = async () => {
