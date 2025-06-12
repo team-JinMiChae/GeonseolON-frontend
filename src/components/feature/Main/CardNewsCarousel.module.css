@@ -6,6 +6,7 @@
     width: 100%;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 50px;
 }
 
 .carousel_CardNews {
@@ -23,11 +24,12 @@
 
 .cardContainer {
     display: flex;
-    overflow-x: auto;
+    overflow: hidden;
     gap: 10px;
     flex: 1;
     padding: 0 10px;
     justify-content: center;
+    width: 100%;
 }
 .carouselTitle{
     width: 100%;

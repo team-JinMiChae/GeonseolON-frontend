@@ -18,6 +18,20 @@
     align-items: center;
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
 }
+
+.externalTitle {
+    padding: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    color: #3A781B;
+}
+
 .noImageIcon {
     font-size: 90px;
     color: #999;

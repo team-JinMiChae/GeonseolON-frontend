@@ -65,6 +65,7 @@ const MainCardNews = ({ type, title, content, attachments }) => {
             <div className={styles.image} onClick={() => setIsOpen(true)}>
                 <img src={imageUrl} alt={title} className={styles.image} />
             </div>
+            <p className={styles.externalTitle}>{title}</p>
         </div>
     );
 };

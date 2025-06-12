@@ -1,47 +1,38 @@
 import React, {useEffect, useState} from 'react';
 
 import MainCardNews from '../../common/CardNews/main_Cardnews.jsx'; // MainCardNews를 임포트
+import CardNews from '../../common/CardNews/CardNews.jsx';
 import styles from './CardNewsCarousel.module.css';
-import axios from "axios";
+import axios from '../../../utils/customAxios';
 
 
 // CardNewsCarousel 컴포넌트 정의
 const CardNewsCarousel = () => {
-
-    useEffect(() => {
-        const fetchCardNews = async () => {
-            try {
-                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/card_news`, {
-                    params: {
-                        pageNo: 1
-                    },
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                console.log('최신 카드뉴스:', res.data);
-            } catch (error) {
-                console.error('카드 뉴스:', error);
-            }
-        };
-
-        fetchCardNews();
-    }, []);
-    // 데이터 정의
-    const data = [
-        { title: "뉴스 1", description: "카드 뉴스 간략한 내용121212",  image: "" },
-        { title: "뉴스 2", description: "카드 뉴스 간략한 내용" ,  image: ""},
-        { title: "뉴스 3", description: "카드 뉴스 간략한 내용",  image: "" },
-        { title: "뉴스 4", description: "카드 뉴스 간략한 내용",  image: "" },
-        { title: "뉴스 5", description: "카드 뉴스 간략한 내용",  image: "" },
-        { title: "뉴스 6", description: "카드 뉴스 간략한 내용",  image: "" },
-        { title: "뉴스 7", description: "카드 뉴스 간략한 내용",  image: "" },
-        { title: "뉴스 8", description: "카드 뉴스 간략한 내용",  image: "" }
-    ];
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(0);
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const cardsPerPage = 5;
+    const [cardsPerPage, setCardsPerPage] = useState(() => {
+        if (window.innerWidth < 768) return 1;
+        if (window.innerWidth < 1024) return 3; 
+        return 5;
+    });
+
+    const currentCards = data.slice(currentIndex, currentIndex + cardsPerPage);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 600) setCardsPerPage(1);
+            else if (window.innerWidth < 900) setCardsPerPage(2); 
+            else if (window.innerWidth < 1200) setCardsPerPage(3);
+            else if (window.innerWidth < 1500) setCardsPerPage(4);
+            else setCardsPerPage(5);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // 양쪽 버튼 클릭
     const handlePrev = () => {
@@ -51,11 +42,31 @@ const CardNewsCarousel = () => {
         setCurrentIndex(prevIndex => Math.min(prevIndex + 1, data.length - cardsPerPage)); // 마지막 페이지 넘어가지 않게
     };
 
-    const currentCards = data.slice(currentIndex, currentIndex + cardsPerPage);
+    
+
+    useEffect(() => {
+        const fetchCardNews = async () => {
+            try {
+                const res = await axios.get(`/card_news`, {
+                    params: {
+                        pageNo: page
+                    },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                setData(res.data.cardNewsResponse);
+                setPage(page => page + 1);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchCardNews();
+    }, []);
 
     return (
         <div className={styles.carousel}>
-
             <div className={styles.carousel_CardNews}>
                 <h2 className={styles.carouselTitle}>최신 뉴스</h2>
                 <div className={styles.carouselWrapper}>
@@ -63,8 +74,8 @@ const CardNewsCarousel = () => {
                         {"<"}
                     </button>
                     <div className={styles.cardContainer}>
-                        {currentCards.map((item, index) => (
-                            <MainCardNews key={index} title={item.title} description={item.description}/>
+                        {currentCards.map((item) => (
+                            <CardNews key={item.boardNo} title={item.title} content={item.content} attachments={item.attachments}/>
                         ))}
                     </div>
                     <button className={styles.next} onClick={handleNext}
